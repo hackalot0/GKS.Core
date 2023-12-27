@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GKS.Core.Data;
 
-public class CollectionObserver<T>
+public class SetObserver<T> : DisposableBase
 {
     public Action<T>? ItemAdded { get; set; }
     public Action<T>? ItemRemoved { get; set; }
@@ -13,10 +13,10 @@ public class CollectionObserver<T>
 
     public IEnumerable<T> Source => source;
 
-    private IEnumerable<T> source;
-    private INotifyCollectionChanged sourceNCC;
+    private readonly IEnumerable<T> source;
+    private readonly INotifyCollectionChanged sourceNCC;
 
-    public CollectionObserver(IEnumerable<T> source, Action<T>? itemAdded = null, Action<T>? itemRemoved = null, Action? cleared = null)
+    public SetObserver(IEnumerable<T> source, Action<T>? itemAdded = null, Action<T>? itemRemoved = null, Action? cleared = null)
     {
         if (source is INotifyCollectionChanged ncc) sourceNCC = ncc;
         else throw new InvalidOperationException($"Argument \"{nameof(source)}\" must implement <{nameof(INotifyCollectionChanged)}>!");
@@ -27,6 +27,15 @@ public class CollectionObserver<T>
         ItemAdded = itemAdded;
         ItemRemoved = itemRemoved;
         Cleared = cleared;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            sourceNCC.CollectionChanged -= Source_CollectionChanged;
+        }
+        base.Dispose(disposing);
     }
 
     protected virtual void OnItemAdded(T item) => ItemAdded?.Invoke(item);

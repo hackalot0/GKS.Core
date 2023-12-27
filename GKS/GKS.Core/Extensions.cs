@@ -8,7 +8,7 @@ namespace GKS.Core;
 
 public static class Extensions
 {
-    public static CollectionObserver<T> Observe<T>(this IEnumerable<T> source, Action<T>? itemAdded = null, Action<T>? itemRemoved = null) => new(source, itemAdded, itemRemoved);
+    public static SetObserver<T> Observe<T>(this IEnumerable<T> source, Action<T>? itemAdded = null, Action<T>? itemRemoved = null) => new(source, itemAdded, itemRemoved);
 
     public static IList<T> ForLoop<T>(this IList<T> source, Action<T> action)
     {
