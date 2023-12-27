@@ -1,4 +1,5 @@
 ﻿using GKS.Core.Data;
+using GKS.Core.Structures;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -20,6 +21,11 @@ public static class Extensions
         for (int i = source.Count - 1; i >= 0; i--) action(source[i]);
         return source;
     }
+
+    public static int BinarySearch<T>(this IList<T> list, T item, IComparer<T>? comparer = null) => BinaryListMethods.BinarySearch(list, item, comparer);
+    public static bool BinaryContains<T>(this IList<T> list, T item, IComparer<T>? comparer = null) => BinaryListMethods.BinaryContains(list, item, comparer);
+    public static bool BinaryAdd<T>(this IList<T> list, T item, IComparer<T>? comparer = null) => BinaryListMethods.BinaryAdd(list, item, comparer);
+    public static bool BinaryRemove<T>(this IList<T> list, T item, IComparer<T>? comparer = null) => BinaryListMethods.BinaryRemove(list, item, comparer);
 
     public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
     {

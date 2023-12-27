@@ -2,7 +2,7 @@
 
 namespace GKS.Core.Structures;
 
-public class Tree<T> where T : Tree<T>
+public class Tree<T> : ITree<T> where T : Tree<T>
 {
     public T? Root => Parent is null ? (T)this : Parent.Root;
     public T? Parent { get; protected set; }
