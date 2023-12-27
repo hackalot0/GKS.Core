@@ -9,13 +9,14 @@ public class CollectionObserver<T>
 {
     public Action<T>? ItemAdded { get; set; }
     public Action<T>? ItemRemoved { get; set; }
+    public Action? Cleared { get; set; }
 
     public IEnumerable<T> Source => source;
 
     private IEnumerable<T> source;
     private INotifyCollectionChanged sourceNCC;
 
-    public CollectionObserver(IEnumerable<T> source, Action<T>? itemAdded = null, Action<T>? itemRemoved = null)
+    public CollectionObserver(IEnumerable<T> source, Action<T>? itemAdded = null, Action<T>? itemRemoved = null, Action? cleared = null)
     {
         if (source is INotifyCollectionChanged ncc) sourceNCC = ncc;
         else throw new InvalidOperationException($"Argument \"{nameof(source)}\" must implement <{nameof(INotifyCollectionChanged)}>!");
@@ -25,10 +26,12 @@ public class CollectionObserver<T>
         this.source = source;
         ItemAdded = itemAdded;
         ItemRemoved = itemRemoved;
+        Cleared = cleared;
     }
 
     protected virtual void OnItemAdded(T item) => ItemAdded?.Invoke(item);
     protected virtual void OnItemRemoved(T item) => ItemRemoved?.Invoke(item);
+    protected virtual void OnCleared() => Cleared?.Invoke();
 
     private void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
@@ -45,8 +48,7 @@ public class CollectionObserver<T>
                 newItems?.ForEach(OnItemAdded);
                 break;
 
-            case NotifyCollectionChangedAction.Reset:
-                break;
+            case NotifyCollectionChangedAction.Reset: OnCleared(); break;
         }
     }
 }
