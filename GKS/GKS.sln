@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKS.Core", "GKS.Core\GKS.Core.csproj", "{61B7806A-BD5F-4358-B405-7C1641A3AE15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKS.Core", "GKS.Core\GKS.Core.csproj", "{61B7806A-BD5F-4358-B405-7C1641A3AE15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKS.Gastro", "GKS.Gastro\GKS.Gastro.csproj", "{3B00C299-C90F-4EAB-A448-E30902636AF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{61B7806A-BD5F-4358-B405-7C1641A3AE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61B7806A-BD5F-4358-B405-7C1641A3AE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61B7806A-BD5F-4358-B405-7C1641A3AE15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B00C299-C90F-4EAB-A448-E30902636AF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B00C299-C90F-4EAB-A448-E30902636AF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B00C299-C90F-4EAB-A448-E30902636AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B00C299-C90F-4EAB-A448-E30902636AF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
