@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKS.Core", "GKS.Core\GKS.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKS.Gastro", "GKS.Gastro\GKS.Gastro.csproj", "{3B00C299-C90F-4EAB-A448-E30902636AF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKS.TestingConsole", "GKS.TestingConsole\GKS.TestingConsole.csproj", "{6A93A221-F033-4E15-AC64-99BA6D4B1A54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3B00C299-C90F-4EAB-A448-E30902636AF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B00C299-C90F-4EAB-A448-E30902636AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B00C299-C90F-4EAB-A448-E30902636AF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A93A221-F033-4E15-AC64-99BA6D4B1A54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A93A221-F033-4E15-AC64-99BA6D4B1A54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A93A221-F033-4E15-AC64-99BA6D4B1A54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A93A221-F033-4E15-AC64-99BA6D4B1A54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

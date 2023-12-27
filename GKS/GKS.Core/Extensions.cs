@@ -1,12 +1,26 @@
 ﻿using GKS.Core.Data;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace GKS.Core;
 
 public static class Extensions
 {
+    public static CollectionObserver<T> Observe<T>(this IEnumerable<T> source, Action<T>? itemAdded = null, Action<T>? itemRemoved = null) => new(source, itemAdded, itemRemoved);
+
+    public static IList<T> ForLoop<T>(this IList<T> source, Action<T> action)
+    {
+        for (int i = 0; i < source.Count; i++) action(source[i]);
+        return source;
+    }
+    public static IList<T> ForLoopReverse<T>(this IList<T> source, Action<T> action)
+    {
+        for (int i = source.Count - 1; i >= 0; i--) action(source[i]);
+        return source;
+    }
+
     public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
     {
         foreach (var item in source) action(item);
