@@ -12,7 +12,7 @@ public class BinaryCollection<T>(IComparer<T>? comparer = null) : ICollection<T>
     public int Count => List.Count;
     public bool IsReadOnly => List.IsReadOnly;
 
-    private readonly BinaryList<T> binaryList = new([], comparer ?? ItemComparer<T>.Default);
+    private readonly BinaryList<T> binaryList = new([], comparer ?? OrderComparer<T>.Default);
 
     public void Add(T item) => binaryList.Add(item);
     public bool Remove(T item) => binaryList.Remove(item);

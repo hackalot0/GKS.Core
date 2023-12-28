@@ -9,7 +9,7 @@ public class BinaryList<T>(IList<T> list, IComparer<T>? comparer = null)
     public IComparer<T> Comparer => comparer;
 
     private readonly IList<T> list = list;
-    private readonly IComparer<T> comparer = comparer ?? ItemComparer<T>.Default;
+    private readonly IComparer<T> comparer = comparer ?? OrderComparer<T>.Default;
 
     public bool Add(T item) => BinaryListMethods.BinaryAdd(list, item, comparer);
     public bool Remove(T item) => BinaryListMethods.BinaryRemove(list, item, comparer);
