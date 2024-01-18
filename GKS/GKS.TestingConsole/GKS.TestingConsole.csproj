@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GKS.Core\GKS.Core.csproj" />
+    <ProjectReference Include="..\GKS.Gastro\GKS.Gastro.csproj" />
   </ItemGroup>
 
 </Project>
