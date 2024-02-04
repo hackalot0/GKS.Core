@@ -2,8 +2,9 @@
 using GKS.Core.Structures;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace GKS.Core;
 
@@ -75,5 +76,25 @@ public static class Extensions
     {
         SyncTo(source, destination, out added, out removed, comparer);
         return destination;
+    }
+
+    public static Task WaitForCompletion(this Task task, TimeSpan? maxWaitTime = null, TimeSpan? intervalTime = null) => WaitForCompletion(task, out _, maxWaitTime, intervalTime);
+    public static Task WaitForCompletion(this Task task, out bool isTimeout, TimeSpan? maxWaitTime = null, TimeSpan? intervalTime = null)
+    {
+        isTimeout = false;
+        var started = DateTime.Now;
+        intervalTime ??= TimeSpan.FromMilliseconds(1);
+        do
+        {
+            if (task.IsCompleted) return task;
+            Thread.Sleep(intervalTime.Value);
+        } while (maxWaitTime is null || (isTimeout = maxWaitTime > TimeSpan.Zero && (DateTime.Now - started < maxWaitTime)));
+        return task;
+    }
+
+    public static IEnumerable<T> AddTo<T>(this IEnumerable<T> source, ICollection<T> target)
+    {
+        target.AddRange(source);
+        return source;
     }
 }

@@ -1,54 +1,83 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using GKS.Gastro.Contracts;
+using GKS.Gastro.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Reflection;
 
 namespace GKS.Gastro;
 
 public class ApiServer
 {
-    /*
+    private static readonly Assembly __assembly = typeof(ApiServer).Assembly;
 
-    var builder = WebApplication.CreateSlimBuilder(new WebApplicationOptions()
+    private WebApplicationOptions? _options;
+    private WebApplicationBuilder? _builder;
+    private WebApplication? _webApp;
+
+    public ApiServer() { }
+
+    public virtual void Init(WebApplicationOptions? options = default)
     {
-        Args = args,
-        ApplicationName = typeof(Program).Assembly.FullName,
-        EnvironmentName = Environments.Staging,
-    });
-
-    builder.Configuration.AddJsonFile($"config.{builder.Environment.EnvironmentName.ToLowerInvariant()}.json", optional: true, reloadOnChange: true);
-    builder.Services.AddControllers();
-
-    var app = builder.Build();
-
-    app.Configuration["General:Endpoints"]?.Split(";").ToList().ForEach(app.Urls.Add);
-
-    app.UseRouting();
-    app.MapControllers();
-
-    app.Run();
-
-    */
-
-    private WebApplication webApp;
-
-    public ApiServer()
-    {
-        var builder = WebApplication.CreateSlimBuilder(new WebApplicationOptions()
+        _options = new()
         {
-            Args = Environment.GetCommandLineArgs(),
-            ApplicationName = typeof(ApiServer).Assembly.FullName,
-            EnvironmentName = Environments.Staging,
-        });
+            Args = options?.Args ?? Environment.GetCommandLineArgs(),
+            ApplicationName = __assembly.FullName,
+            EnvironmentName = options?.EnvironmentName ?? Environments.Development,
+        };
 
-        builder.Configuration.AddJsonFile($"config.{builder.Environment.EnvironmentName.ToLowerInvariant()}.json", optional: true, reloadOnChange: true);
-        builder.Services.AddControllers();
+        _builder = WebApplication.CreateSlimBuilder(_options);
 
-        webApp = builder.Build();
+        InitConfiguration(_builder);
+        InitServices(_builder);
+
+        _webApp = _builder.Build();
+
+        InitWebApp(_webApp);
     }
-
-    public void Run()
+    public virtual void InitConfiguration(IHostApplicationBuilder builder)
     {
-        webApp.Run();
+        builder.Configuration.AddJsonFile($"config.{builder.Environment.EnvironmentName.ToLowerInvariant()}.json", optional: true, reloadOnChange: true);
     }
+    public virtual void InitServices(IHostApplicationBuilder builder)
+    {
+        builder.Services.AddTransient<IRuntimeService>(a => new RuntimeService(_webApp));
+        builder.Services.AddControllers().ConfigureApplicationPartManager(apm =>
+        {
+            var appParts = apm.ApplicationParts;
+            appParts.Clear();
+            appParts.Add(new AssemblyPart(__assembly));
+        });
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+    }
+    public virtual void InitWebApp(WebApplication webApp)
+    {
+        webApp.Configuration["General:Endpoints"]?.Split(";").ToList().ForEach(webApp.Urls.Add);
+
+        var route = webApp.Configuration["Api:Route"];
+        ArgumentException.ThrowIfNullOrWhiteSpace(route);
+        webApp.MapControllerRoute(
+            name: "default",
+            pattern: route,
+            defaults: new
+            {
+                controller = "Controller",
+                action = "Action"
+            });
+
+        if (webApp.Environment.IsDevelopment())
+        {
+            webApp.UseSwagger();
+            webApp.UseSwaggerUI();
+        }
+
+        webApp.UseRouting();
+        webApp.MapControllers();
+    }
+
+    public void Run() => _webApp?.Run();
+    public Task? RunAsync() => _webApp?.RunAsync();
 }

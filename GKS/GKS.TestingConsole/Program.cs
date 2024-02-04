@@ -1,5 +1,4 @@
 ﻿using GKS.Core;
-using GKS.Gastro;
 
 namespace GKS.TestingConsole;
 
@@ -7,8 +6,6 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        var apiServer = new ApiServer();
-        apiServer.Run();
     }
 
     private static void Test_ObservableCollection()
