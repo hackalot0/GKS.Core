@@ -1,7 +1,7 @@
-﻿using GKS.Gastro.Contracts;
+﻿using GKS.Web.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GKS.Gastro.Controllers;
+namespace GKS.Web.Controllers;
 
 public class RuntimeController(IRuntimeService runtimeService) : ControllerBase
 {

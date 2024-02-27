@@ -1,5 +1,4 @@
-﻿
-namespace GKS.Gastro.WebItems;
+﻿namespace GKS.Web.WebItems;
 
 public class StatsInfo
 {

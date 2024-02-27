@@ -1,5 +1,5 @@
-﻿using GKS.Gastro.Contracts;
-using GKS.Gastro.Services;
+﻿using GKS.Web.Contracts;
+using GKS.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
@@ -7,15 +7,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
-namespace GKS.Gastro;
+namespace GKS.Web;
 
-public class ApiServer
+public class ApiServer : IApiServer
 {
     private static readonly Assembly __assembly = typeof(ApiServer).Assembly;
 
     private WebApplicationOptions? _options;
     private WebApplicationBuilder? _builder;
     private WebApplication? _webApp;
+
+    public WebApplication? WebApp => _webApp;
 
     public ApiServer() { }
 
@@ -43,7 +45,7 @@ public class ApiServer
     }
     public virtual void InitServices(IHostApplicationBuilder builder)
     {
-        builder.Services.AddTransient<IRuntimeService>(a => new RuntimeService(_webApp));
+        builder.Services.AddTransient<IRuntimeService, RuntimeService>();
         builder.Services.AddControllers().ConfigureApplicationPartManager(apm =>
         {
             var appParts = apm.ApplicationParts;
@@ -79,5 +81,5 @@ public class ApiServer
     }
 
     public void Run() => _webApp?.Run();
-    public Task? RunAsync() => _webApp?.RunAsync();
+    public Task? RunAsync(CancellationToken token = default) => _webApp?.RunAsync(token);
 }

@@ -8,18 +8,19 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\GKS.Core\GKS.Core.csproj" />
-	  <ProjectReference Include="..\GKS.Web\GKS.Web.csproj" />
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="config.staging.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Database\" />
+		<ProjectReference Include="..\GKS.Core\GKS.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Providers\" />
 	</ItemGroup>
 
 </Project>

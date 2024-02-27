@@ -1,20 +1,14 @@
-﻿using GKS.Gastro.Contracts;
-using GKS.Gastro.WebItems;
-using Microsoft.AspNetCore.Builder;
+﻿using GKS.Web.Contracts;
+using GKS.Web.WebItems;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 
-namespace GKS.Gastro.Services;
+namespace GKS.Web.Services;
 
-public class RuntimeService : IRuntimeService
+public class RuntimeService(IHost _host) : IRuntimeService
 {
-    private static Process _process = Process.GetCurrentProcess();
-
-    private WebApplication _webApp;
-
-    public RuntimeService(WebApplication webApp)
-    {
-        _webApp = webApp;
-    }
+    private static readonly Process _process = Process.GetCurrentProcess();
 
     public StatsInfo GetStats()
     {
@@ -23,8 +17,11 @@ public class RuntimeService : IRuntimeService
         var cpuUsage = Convert.ToDecimal(totalCpuTime.TotalMilliseconds / (totalRunTime.TotalMilliseconds * Environment.ProcessorCount));
         var ramUsage = _process.WorkingSet64;
 
-        var instanceName = _webApp.Configuration["Instance:Name"];
-        var instanceID = _webApp.Configuration["Instance:ID"];
+        var hostConfig = _host.Services.GetService(typeof(IConfiguration)) as IConfiguration;
+        ArgumentNullException.ThrowIfNull(hostConfig);
+
+        var instanceName = hostConfig["Instance:Name"];
+        var instanceID = hostConfig["Instance:ID"];
 
         return new()
         {

@@ -1,13 +1,14 @@
-﻿using GKS.Core;
-using GKS.Gastro;
+﻿using GKS.Gastro;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 
-var apiServer = new ApiServer();
+var apiServer = new DatabaseApiServer();
+
 apiServer.Init(new WebApplicationOptions()
 {
     Args = Environment.GetCommandLineArgs(),
     ApplicationName = "Gastro Database",
     EnvironmentName = Environments.Development,
 });
-apiServer.RunAsync()?.WaitForCompletion();
+
+apiServer.Run();

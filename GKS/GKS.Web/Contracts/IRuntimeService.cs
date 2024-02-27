@@ -1,6 +1,6 @@
-﻿using GKS.Gastro.WebItems;
+﻿using GKS.Web.WebItems;
 
-namespace GKS.Gastro.Contracts;
+namespace GKS.Web.Contracts;
 
 public interface IRuntimeService
 {
