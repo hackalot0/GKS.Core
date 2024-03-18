@@ -16,8 +16,10 @@ public class ApiServer : IApiServer
     private WebApplicationOptions? _options;
     private WebApplicationBuilder? _builder;
     private WebApplication? _webApp;
+    private IRuntimeService? _runtimeService;
 
     public WebApplication? WebApp => _webApp;
+    public IRuntimeService? RuntimeService => _runtimeService;
 
     public ApiServer() { }
 
@@ -45,7 +47,7 @@ public class ApiServer : IApiServer
     }
     public virtual void InitServices(IHostApplicationBuilder builder)
     {
-        builder.Services.AddTransient<IRuntimeService, RuntimeService>();
+        builder.Services.AddSingleton<IRuntimeService, RuntimeService>();
         builder.Services.AddControllers().ConfigureApplicationPartManager(apm =>
         {
             var appParts = apm.ApplicationParts;
@@ -80,6 +82,19 @@ public class ApiServer : IApiServer
         webApp.MapControllers();
     }
 
-    public void Run() => _webApp?.Run();
-    public Task? RunAsync(CancellationToken token = default) => _webApp?.RunAsync(token);
+    public void Run()
+    {
+        BeforeRun();
+        _webApp?.Run();
+    }
+    public Task? RunAsync(CancellationToken token = default)
+    {
+        BeforeRun();
+        return _webApp?.RunAsync(token);
+    }
+
+    protected virtual void BeforeRun()
+    {
+        _runtimeService = _webApp?.Services.GetService<IRuntimeService>();
+    }
 }
