@@ -1,6 +1,7 @@
 ﻿using GKS.Web.Components;
 using GKS.Web.Contracts;
 using GKS.Web.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -66,7 +67,7 @@ public class ApiServer : IApiServer
         {
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => builder.Configuration.Bind("JwtSettings", options))
-                .AddCookie(JwtBearerDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
         }
 
         builder.Services.AddEndpointsApiExplorer();

@@ -1,6 +1,6 @@
 ﻿namespace GKS.Core;
 
-public class SenderEvent
+public abstract class SenderEvent
 {
     public delegate void Handler(Args args);
 
