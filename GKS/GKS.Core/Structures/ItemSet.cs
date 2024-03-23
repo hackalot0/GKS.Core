@@ -10,9 +10,9 @@ public class ItemSet<T> : IList<T>, INotifyCollectionChanged
     public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
     public event SenderEvent.Handler? Cleared;
-    public event ItemEvent<T, int>.Handler? ItemAdded;
-    public event ItemEvent<T, int>.Handler? ItemRemoved;
-    public event ItemChangeEvent<T, int>.Handler? ItemReplaced;
+    public event IndexedItemEvent<T, int>.Handler? ItemAdded;
+    public event IndexedItemEvent<T, int>.Handler? ItemRemoved;
+    public event IndexedItemChangeEvent<T, int>.Handler? ItemReplaced;
 
     public int Count => _items.Count;
     public bool IsReadOnly => ((IList<T>)_items).IsReadOnly;
