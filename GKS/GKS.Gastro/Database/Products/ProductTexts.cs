@@ -3,9 +3,9 @@ using GKS.Gastro.Database.Localization;
 
 namespace GKS.Gastro.Database.Products;
 
-public class ProductTexts : INameable, IDescribable
+public class ProductTexts : INameable, IDescribable, ILanguageDependant
 {
-    public required ActiveLanguage? ActiveLanguage { get; set; }
+    public required ContentLanguage? Language { get; set; }
 
     public required string? Name { get; set; }
     public string? Description { get; set; }

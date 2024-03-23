@@ -1,6 +1,6 @@
 ﻿namespace GKS.Gastro.Database.Localization;
 
-public class ActiveLanguage : KeyedItem
+public class ContentLanguage : KeyedItem
 {
     public Language? Language { get; set; }
 }
