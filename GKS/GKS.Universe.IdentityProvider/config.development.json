@@ -3,21 +3,17 @@
     "Endpoints": "http://*:56000/"
   },
   "Instance": {
-    "Name": "Gastro Database",
-    "ID": "0E75CD4A-4F66-48AB-8BA2-E8E9E5E3F28E"
+    "Name": "Universe Identity Provider",
+    "ID": "06AD7D57-A046-420E-A474-C0601136EB60"
   },
   "Auth": {
-    "UseBearer": true,
     "UseIdentityProvider": false,
     "Supervisor": {
       "Username": "supervisor",
       "Password": "supervisor"
     }
   },
-  "IdentityProvider": {
-    "Endpoint": ""
-  },
   "Api": {
-    "Route": "gastro/api/v1/{controller}/{action}"
+    "Route": "universe/identity/provider/api/v1/{controller}/{action}"
   }
 }

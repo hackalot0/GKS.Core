@@ -1,7 +1,9 @@
-﻿using GKS.Web.Contracts;
+﻿using GKS.Web.Components;
+using GKS.Web.Contracts;
 using GKS.Web.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,14 +14,19 @@ namespace GKS.Web;
 public class ApiServer : IApiServer
 {
     private static readonly Assembly __assembly = typeof(ApiServer).Assembly;
+    private static readonly Type __controllerBase = typeof(ControllerBase);
 
     private WebApplicationOptions? _options;
     private WebApplicationBuilder? _builder;
     private WebApplication? _webApp;
     private IRuntimeService? _runtimeService;
 
+    public event EventHandler<StopEventArgs>? StopRequest;
+
     public WebApplication? WebApp => _webApp;
     public IRuntimeService? RuntimeService => _runtimeService;
+
+    protected List<Type> ControllerBlacklist { get; } = [];
 
     public ApiServer() { }
 
@@ -52,8 +59,16 @@ public class ApiServer : IApiServer
         {
             var appParts = apm.ApplicationParts;
             appParts.Clear();
-            appParts.Add(new AssemblyPart(__assembly));
+            appParts.Add(new SelectiveAssemblyPart(__assembly, TypeSelector));
         });
+
+        if (builder.Configuration.GetValue<bool>("Auth:UseBearer"))
+        {
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => builder.Configuration.Bind("JwtSettings", options))
+                .AddCookie(JwtBearerDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
+        }
+
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
     }
@@ -93,8 +108,17 @@ public class ApiServer : IApiServer
         return _webApp?.RunAsync(token);
     }
 
+    protected virtual bool AllowController(TypeInfo controllerType) => !ControllerBlacklist.Contains(controllerType.AsType());
+
     protected virtual void BeforeRun()
     {
         _runtimeService = _webApp?.Services.GetService<IRuntimeService>();
+        if (_runtimeService is null) return;
+
+        _runtimeService.StopRequest += _runtimeService_StopRequest;
     }
+    protected virtual void OnStopRequest(StopEventArgs ea) => StopRequest?.Invoke(this, ea);
+
+    private bool TypeSelector(TypeInfo typeInfo) => typeInfo.IsAssignableTo(__controllerBase) && AllowController(typeInfo);
+    private void _runtimeService_StopRequest(object? sender, StopEventArgs e) => OnStopRequest(e);
 }

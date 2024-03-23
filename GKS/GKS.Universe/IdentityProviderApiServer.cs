@@ -1,9 +1,11 @@
 ﻿using GKS.Web;
 using GKS.Web.Components;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace GKS.Gastro;
+namespace GKS.Universe;
 
-public class DatabaseApiServer : ApiServer
+public class IdentityProviderApiServer : ApiServer
 {
     protected override void OnStopRequest(StopEventArgs ea)
     {
